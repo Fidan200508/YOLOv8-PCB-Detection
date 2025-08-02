@@ -1,0 +1,22 @@
+import os
+
+labels_dir = "pcb-dataset/labels"  # path to labels
+
+for split in ["train", "val"]:
+    split_dir = os.path.join(labels_dir, split)
+    for file in os.listdir(split_dir):
+        if file.endswith(".txt"):
+            file_path = os.path.join(split_dir, file)
+            with open(file_path, "r") as f:
+                lines = f.readlines()
+
+            new_lines = []
+            for line in lines:
+                parts = line.strip().split()
+                parts[0] = "0"  # change class ID from 15 to 0
+                new_lines.append(" ".join(parts) + "\n")
+
+            with open(file_path, "w") as f:
+                f.writelines(new_lines)
+
+print("✅ All label IDs updated to 0.")
